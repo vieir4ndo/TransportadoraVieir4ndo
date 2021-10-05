@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,9 @@ using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using TV.SER;
+using TV.SER.Interfaces;
+using TV.SER.DTOs;
 
 namespace TV.API
 {
@@ -50,7 +54,12 @@ namespace TV.API
             builder.AddEntityFrameworkStores<ApplicationDbContex>();
             builder.AddSignInManager<SignInManager<User>>();
             builder.AddRoleManager<RoleManager<IdentityRole>>();
-            
+            builder.AddDefaultTokenProviders();
+
+            services.AddAuthorization(options =>
+                options.AddPolicy("ClientPolicy",
+                policy => policy.RequireRole("Client")));
+                
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -77,6 +86,8 @@ namespace TV.API
                                     });
                 });
 
+            services.AddSingleton<IEmail, MailJet>();
+            services.Configure<EmailOptionsDTO>(Configuration.GetSection("MailJet"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,6 +2,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TV.DAL\TV.DAL.csproj" />
+    <ProjectReference Include="..\TV.SER\TV.SER.csproj" />
   </ItemGroup>
 
   <ItemGroup>

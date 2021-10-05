@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TV.API.ViewModels
 {
-    public class CreateAdministratorsViewModel
+    public class CreateUsersViewModel
     {
         [Required]
         public string Username { get; set; }

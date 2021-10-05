@@ -24,7 +24,7 @@ namespace TV.API.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "ClientPolicy")]
         public async Task<IActionResult> Values()
         {
             var values = await _context.Values.ToListAsync(); 
