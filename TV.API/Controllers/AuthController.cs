@@ -15,6 +15,10 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Configuration;
+using System.Web;
+using Microsoft.Extensions.Options;
+using TV.SER.DTOs;
+using TV.SER.Interfaces;
 
 namespace TV.API.Controllers
 {
@@ -25,12 +29,21 @@ namespace TV.API.Controllers
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _config;
+        private readonly IOptions<EmailOptionsDTO> _emailOptions;
+        private readonly IEmail _email;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration config)
+        public AuthController(
+            UserManager<User> userManager,
+            SignInManager<User> signInManager,
+            IConfiguration config,
+            IOptions<EmailOptionsDTO> emailOptions,
+            IEmail email)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
+            _emailOptions = emailOptions;
+            _email = email;
         }
 
         [HttpPost("login")]
@@ -55,7 +68,60 @@ namespace TV.API.Controllers
                 token = JwtTokenGeneratorMachine(user)
             });
         }
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user != null || user.EmailConfirmed)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var changePassword = Request.Headers["ChangePasswordUrl"];//http://localhost:4200/change-password
+
+                var uriBuilder = new UriBuilder(changePassword);
+                var query = HttpUtility.ParseQueryString(uriBuilder.Query);
+                query["token"] = token;
+                query["userid"] = user.Id;
+                uriBuilder.Query = query.ToString();
+                var urlString = uriBuilder.ToString();
+
+                var emailBody = $"Click on the link to change password </br>{urlString}";
+                await _email.Send(model.Email, emailBody, _emailOptions.Value);
+
+                return Ok();
+            }
+
+            return Unauthorized();
+        }
+
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var resetPasswordResult = await _userManager.ResetPasswordAsync(user, Uri.UnescapeDataString(model.Token), model.Password);
+
+            if (resetPasswordResult.Succeeded)
+            {
+                return Ok();
+            }
+
+            return Unauthorized();
+        }
         
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            var confirm = await _userManager.ConfirmEmailAsync(user, Uri.UnescapeDataString(model.Token));
+
+            if (confirm.Succeeded)
+            {
+                return Ok();
+            }
+
+            return Unauthorized();
+        }
         private async Task<string> JwtTokenGeneratorMachine(User userInfo)  
         {  
             var claims = new List<Claim>
