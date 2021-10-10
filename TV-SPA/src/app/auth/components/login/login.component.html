@@ -1,0 +1,23 @@
+<div class="row">
+    <div class="col-md-6 offset-md-3 mt-4">
+        <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" class="form-control" name="username" ngModel required #username="ngModel"
+                    placeholder="Enter Username">
+            </div>
+            <br />
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password" ngModel required #password="ngModel"
+                    placeholder="Password">
+            </div>
+            <br />
+            <div class="form-group">
+                <a [routerLink]="['/reset-password']">Forgot Password</a>
+            </div>
+            <br />
+            <button type="submit" [disabled]="f.invalid" class="btn btn-primary">Sign in</button>
+        </form>
+    </div>
+</div>

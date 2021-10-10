@@ -19,6 +19,7 @@ using System.Web;
 using Microsoft.Extensions.Options;
 using TV.SER.DTOs;
 using TV.SER.Interfaces;
+using Microsoft.AspNetCore.Cors;
 
 namespace TV.API.Controllers
 {
@@ -63,9 +64,10 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
 
-            return Ok(new {
+            return Ok(new
+            {
                 result = result,
-                token = JwtTokenGeneratorMachine(user)
+                token = JwtTokenGeneratorMachine(user).Result
             });
         }
 
@@ -108,7 +110,7 @@ namespace TV.API.Controllers
 
             return Unauthorized();
         }
-        
+
         [HttpPost("confirm-email")]
         public async Task<IActionResult> ConfirmEmail(ConfirmEmailViewModel model)
         {
@@ -122,8 +124,8 @@ namespace TV.API.Controllers
 
             return Unauthorized();
         }
-        private async Task<string> JwtTokenGeneratorMachine(User userInfo)  
-        {  
+        private async Task<string> JwtTokenGeneratorMachine(User userInfo)
+        {
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, userInfo.Id),
@@ -134,12 +136,12 @@ namespace TV.API.Controllers
 
             foreach (var role in roles)
             {
-                claims.Add(new Claim(ClaimTypes.Role,role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8
              .GetBytes(_config.GetSection("AppSettings:Key").Value));
-             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha512Signature);
 
             var tokenDescriptor = new SecurityTokenDescriptor
             {
@@ -152,6 +154,6 @@ namespace TV.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
 
             return tokenHandler.WriteToken(token);
-        }   
+        }
     }
 }

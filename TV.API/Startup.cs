@@ -41,7 +41,8 @@ namespace TV.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IdentityBuilder builder = services.AddIdentityCore<User>(opt => {
+            IdentityBuilder builder = services.AddIdentityCore<User>(opt =>
+            {
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
@@ -61,22 +62,22 @@ namespace TV.API
             services.AddAuthorization(options =>
                 options.AddPolicy("ClientPolicy",
                 policy => policy.RequireRole("Client")));
-                
+
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII
                               .GetBytes(Configuration.GetSection("AppSettings:Key").Value)),
-                            ValidateIssuer = false,
-                            ValidateAudience = false
-                        };
+                        ValidateIssuer = false,
+                        ValidateAudience = false
+                    };
 
                 });
 
-            services.AddDbContext<TV.DAL.ApplicationDbContex>(options => 
+            services.AddDbContext<TV.DAL.ApplicationDbContex>(options =>
                 options.UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=TransportadoraVieir4ndo; Integrated Security=true"));
             services.AddControllers();
             services.AddCors(options =>
@@ -100,8 +101,13 @@ namespace TV.API
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseCors(MyAllowSpecificOrigins);
-            
+            app.UseCors(builder =>
+            {
+                builder.WithOrigins("http://localhost:4200");
+                builder.AllowAnyMethod();
+                builder.AllowAnyHeader();
+            });
+
             app.UseRouting();
 
             app.UseAuthentication();
