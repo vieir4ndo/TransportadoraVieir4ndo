@@ -8,7 +8,7 @@ import { NgProgressModule } from '@ngx-progressbar/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AlertModule } from 'ngx-alerts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     NgProgressModule,
     BrowserAnimationsModule,
     BrowserModule,
+    BsDropdownModule.forRoot(),
     AlertModule.forRoot({ maxMessages: 5, timeout: 5000, positionX: 'right', positionY: 'top' })
   ],
   exports: [
