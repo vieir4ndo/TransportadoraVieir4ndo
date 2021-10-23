@@ -7,6 +7,7 @@ import { ValueComponent } from './value/value.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,9 @@ import { AuthModule } from './auth/auth.module';
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
-    AuthModule
+    AuthModule,
+    BrowserAnimationsModule,
+    BrowserModule
   ],
   providers: [],
   bootstrap: [AppComponent]
