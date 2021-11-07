@@ -1,29 +1,19 @@
-using System.Collections.Immutable;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using TV.DAL.Entities;
 using TV.DAL;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using TV.SER;
 using TV.SER.Interfaces;
 using TV.SER.DTOs;
+using TV.SER.Factories;
 
 namespace TV.API
 {
@@ -90,6 +80,15 @@ namespace TV.API
                 });
 
             services.AddSingleton<IEmail, MailJet>();
+            services.AddSingleton<ICloudStorage, AzureStorage>();
+            services.AddSingleton<IStorageConnectionFactory, StorageConnectionFactory>(sp =>
+            {
+                CloudStorageOptionsDTO cloudStorageOptionsDTO = new CloudStorageOptionsDTO();
+                cloudStorageOptionsDTO.ConnectionString = Configuration["AzureBlobStorage:ConnectionString"];
+                cloudStorageOptionsDTO.ProfilePicsContainer = Configuration["AzureBlobStorage:BlobContainer"];
+
+                return new StorageConnectionFactory(cloudStorageOptionsDTO);
+            });
             services.Configure<EmailOptionsDTO>(Configuration.GetSection("MailJet"));
         }
 

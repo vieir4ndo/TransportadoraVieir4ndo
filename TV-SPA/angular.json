@@ -34,8 +34,7 @@
               "src/styles.scss",
               "../TV-SPA/node_modules/@fortawesome/fontawesome-free/scss/fontawesome.scss",
               "../TV-SPA/node_modules/@fortawesome/fontawesome-free/scss/brands.scss",
-              "../TV-SPA/node_modules/@fortawesome/fontawesome-free/scss/solid.scss",
-              "../TV-SPA/node_modules/bootstrap/scss/bootstrap.scss"
+              "../TV-SPA/node_modules/@fortawesome/fontawesome-free/scss/solid.scss"
             ],
             "scripts": []
           },

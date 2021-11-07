@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using TV.API.ViewModels;
 using TV.DAL;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using TV.SER.Interfaces;
+using Microsoft.AspNetCore.Http;
+using TV.API.ViewModels;
 
 namespace TV.API.Controllers
 {
@@ -16,27 +12,28 @@ namespace TV.API.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ApplicationDbContex _context;
+        private readonly ICloudStorage _storage;
 
-
-        public ValuesController( ApplicationDbContex context)
+        public ValuesController(ApplicationDbContex context, ICloudStorage storage)
         {
+            _storage = storage;
             _context = context;
         }
 
-        [HttpGet]
-        [Authorize(Policy = "ClientPolicy")]
-        public async Task<IActionResult> Values()
+        // POST api/values
+        [HttpPost]
+        public async Task<IActionResult> Post([FromForm] IFormFile file)
         {
-            var values = await _context.Values.ToListAsync(); 
-            return Ok(values);
+            await _storage.UploadAsync(file);
+            return Ok();
         }
 
-        [Authorize(Roles = "Administrator")]
-        [HttpGet("{id}")]
-        public async Task<IActionResult> ValueById(int id)
+        // POST api/values
+        [HttpPost("deleteimage")]
+        public async Task<IActionResult> Delete(DeleteImageViewModel model)
         {
-            var value = await _context.Values.FirstOrDefaultAsync(v => v.Id == id); 
-            return Ok(value);
+            await _storage.DeleteImage(model.Url);
+            return Ok();
         }
     }
 }
