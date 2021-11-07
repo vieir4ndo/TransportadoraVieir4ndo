@@ -7,9 +7,8 @@ import { ValueComponent } from './value/value.component';
 import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { HomeComponent } from './pages/home/home.component';
+import { ClientDashboardModule } from './client-dashboard/client-dashboard.module';
 
 @NgModule({
   declarations: [
@@ -23,9 +22,7 @@ import { HomeComponent } from './pages/home/home.component';
     HttpClientModule,
     SharedModule,
     AuthModule,
-    BrowserAnimationsModule,
-    BrowserModule,
-    BsDropdownModule.forRoot()
+    ClientDashboardModule
   ],
   providers: [],
   bootstrap: [AppComponent]
