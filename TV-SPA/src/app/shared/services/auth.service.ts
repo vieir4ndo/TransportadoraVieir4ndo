@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -11,6 +12,8 @@ export class AuthService {
   usersUrl = "http://localhost:5000/api/users/";
   confirmEmailUrl = "http://localhost:4200/confirm-email";
   changePasswordUrl = "http://localhost:4200/change-password";
+  helper = new JwtHelperService();
+  decodedToken: any;
 
   constructor(private http: HttpClient) { }
 
@@ -20,6 +23,7 @@ export class AuthService {
         const user = response;
         if (user.result.succeeded) {
           localStorage.setItem('token', user.token);
+          this.decodedToken = this.helper.decodeToken(user.token);
         }
       })
     )
@@ -47,5 +51,10 @@ export class AuthService {
 
   changePassword(model: any) {
     return this.http.post(this.authUrl + 'change-password', model);
+  }
+
+  loggedIn() {
+    const token = localStorage.getItem('token') as string;
+    return !this.helper.isTokenExpired(token);
   }
 }
