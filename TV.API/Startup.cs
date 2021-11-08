@@ -86,13 +86,13 @@ namespace TV.API
             services.AddSingleton<IEmail, MailJet>();
             services.AddSingleton<ICloudStorage, AzureStorage>();
             services.AddSingleton<IStorageConnectionFactory, StorageConnectionFactory>(sp =>
-           {
-               CloudStorageOptionsDTO cloudStorageOptionsDTO = new CloudStorageOptionsDTO();
-               cloudStorageOptionsDTO.ConnectionString = Configuration["AzureBlobStorage:ConnectionString"];
-               cloudStorageOptionsDTO.ProfilePicsContainer = Configuration["AzureBlobStorage:BlobContainer"];
-               return new StorageConnectionFactory(cloudStorageOptionsDTO);
+            {
+                CloudStorageOptionsDTO cloudStorageOptionsDTO = new CloudStorageOptionsDTO();
+                cloudStorageOptionsDTO.ConnectionString = Configuration["AzureBlobStorage:ConnectionString"];
+                cloudStorageOptionsDTO.ProfilePicsContainer = Configuration["AzureBlobStorage:BlobContainer"];
 
-           });
+                return new StorageConnectionFactory(cloudStorageOptionsDTO);
+            });
             services.Configure<EmailOptionsDTO>(Configuration.GetSection("MailJet"));
         }
 

@@ -206,33 +206,24 @@ namespace TV.API.Controllers
         private async Task<IActionResult> UpdateUser(string id, [FromForm] UpdateUserViewModel model)
         {
             if (id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
-            {
                 return Unauthorized();
-            }
 
-            var userDb = await _userManager.FindByIdAsync(id);
+            var userDB = await _userManager.FindByIdAsync(id);
 
-            //Update Profile
-
-            if (userDb.ProfileImageUrl != null)
+            if (model.ProfileImage != null)
             {
-                await _cloudStorage.DeleteImage(userDb.ProfileImageUrl);
+                await _cloudStorage.DeleteImage(userDB.ProfileImageUrl);
+
+                var addedFileNameUrl = await _cloudStorage.UploadAsync(model.ProfileImage);
+                userDB.ProfileImageUrl = addedFileNameUrl;
             }
-            var addedFileNameUrl = await _cloudStorage.UploadAsync(model.ProfileImage);
-            userDb.ProfileImageUrl = addedFileNameUrl;
 
+            var result = await _userManager.UpdateAsync(userDB);
 
-            var result = await _userManager.UpdateAsync(userDb);
-            var updatedEmployer = await _userManager.FindByIdAsync(id);
+            var updatedUser = await _userManager.FindByIdAsync(id);
 
             if (result.Succeeded)
-            {
-                return Ok(new
-                {
-                    result = result,
-                    userDb
-                });
-            }
+                return Ok(new { Result = result, userDB = updatedUser });
 
             return BadRequest(result);
         }
