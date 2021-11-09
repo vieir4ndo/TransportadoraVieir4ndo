@@ -50,12 +50,8 @@ namespace TV.API
             builder.AddDefaultTokenProviders();
 
             services.AddAuthorization(options =>
-            {
-                options.AddPolicy("AdministratorPolicy", policy => policy.RequireRole("Administrator"));
-                options.AddPolicy("ClientPolicy", policy => policy.RequireRole("Client"));
-                options.AddPolicy("DeliveryworkerPolicy", policy => policy.RequireRole("Deliveryworker"));
-                options.AddPolicy("ShipmentWorkerPolicy", policy => policy.RequireRole("ShipmentWorker"));
-            });
+                options.AddPolicy("ClientPolicy",
+                policy => policy.RequireRole("Client")));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

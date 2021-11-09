@@ -7,7 +7,7 @@ namespace TV.SER.Interfaces
 {
     public interface ICloudStorage
     {
-        Task<string> UploadAsync(IFormFile file);
+        Task UploadAsync(IFormFile file);
 
         Task DeleteImage(string name);
     }
