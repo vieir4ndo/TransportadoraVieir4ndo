@@ -14,6 +14,7 @@ using TV.SER;
 using TV.SER.Interfaces;
 using TV.SER.DTOs;
 using TV.SER.Factories;
+using System;
 
 namespace TV.API
 {
@@ -68,7 +69,7 @@ namespace TV.API
                 });
 
             services.AddDbContext<TV.DAL.ApplicationDbContex>(options =>
-                options.UseSqlServer("Data source=(localdb)\\mssqllocaldb; Initial Catalog=TransportadoraVieir4ndo; Integrated Security=true"));
+                 options.UseSqlServer(Configuration["Database:ConnectionString"]));
             services.AddControllers();
             services.AddCors(options =>
                 {
@@ -82,14 +83,29 @@ namespace TV.API
             services.AddSingleton<IEmail, MailJet>();
             services.AddSingleton<ICloudStorage, AzureStorage>();
             services.AddSingleton<IStorageConnectionFactory, StorageConnectionFactory>(sp =>
-            {
-                CloudStorageOptionsDTO cloudStorageOptionsDTO = new CloudStorageOptionsDTO();
-                cloudStorageOptionsDTO.ConnectionString = Configuration["AzureBlobStorage:ConnectionString"];
-                cloudStorageOptionsDTO.ProfilePicsContainer = Configuration["AzureBlobStorage:BlobContainer"];
+           {
+               CloudStorageOptionsDTO cloudStorageOptionsDTO = new CloudStorageOptionsDTO();
+               cloudStorageOptionsDTO.ConnectionString = Configuration["AzureBlobStorage:ConnectionString"];
+               cloudStorageOptionsDTO.ProfilePicsContainer = Configuration["AzureBlobStorage:BlobContainer"];
+               return new StorageConnectionFactory(cloudStorageOptionsDTO);
 
-                return new StorageConnectionFactory(cloudStorageOptionsDTO);
-            });
+           });
             services.Configure<EmailOptionsDTO>(Configuration.GetSection("MailJet"));
+         services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "Transportadora Vieir4ndo Swagger",
+                    Description = "APIs for the project Transportadora Vieir4ndo:)",
+                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    {
+                        Name = "Matheus Vieira Santos",
+                        Url = new Uri("https://github.com/vieir4ndo")
+                    }
+                });
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -116,6 +132,14 @@ namespace TV.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+
+              app.UseSwagger();
+
+            app.UseSwaggerUI(s =>
+            {
+                s.RoutePrefix = "swagger";
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
             });
         }
     }

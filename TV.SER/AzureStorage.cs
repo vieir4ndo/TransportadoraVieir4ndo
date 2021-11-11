@@ -25,7 +25,7 @@ namespace TV.SER
             await blob.DeleteIfExistsAsync();
         }
 
-        public async Task UploadAsync(IFormFile file)
+        public async Task<string> UploadAsync(IFormFile file)
         {
             var blobContainer = await _storageConnectionFactory.GetContainer();
             CloudBlockBlob blob = blobContainer.GetBlockBlobReference(GetRandomBlobName(file.FileName));
@@ -33,7 +33,7 @@ namespace TV.SER
             {
                 await blob.UploadFromStreamAsync(stream);
             }
-
+            return blob.Uri.AbsoluteUri;
         }
         private string GetRandomBlobName(string filename)
         {

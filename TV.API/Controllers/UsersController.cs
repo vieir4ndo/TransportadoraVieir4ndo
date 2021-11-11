@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using TV.SER.DTOs;
 using TV.SER.Interfaces;
 using System.Web;
+using System.Security.Claims;
 
 namespace TV.API.Controllers
 {
@@ -26,17 +27,20 @@ namespace TV.API.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IOptions<EmailOptionsDTO> _emailOptions;
         private readonly IEmail _email;
+         private readonly ICloudStorage _cloudStorage;
 
         public UsersController(
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<EmailOptionsDTO> emailOptions,
-            IEmail email)
+            IEmail email,
+            ICloudStorage cloudStorage)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailOptions = emailOptions;
             _email = email;
+            _cloudStorage = cloudStorage;
         }
 
         [HttpPost("create-administrator")]
@@ -169,6 +173,68 @@ namespace TV.API.Controllers
 
             var emailBody = $"Please confirm your email by clicking on the link below </br>{urlString}";
             await _email.Send(model.Email, emailBody, _emailOptions.Value);
+        }
+
+        [HttpPut("update-client/{id}")]
+        [Authorize(Policy = "ClientPolicy")]
+        public async Task<IActionResult> UpdateClient(string id, [FromForm] UpdateUserViewModel model)
+        {
+            return await UpdateUser(id, model);
+        }
+
+        [HttpPut("update-administrator/{id}")]
+        [Authorize(Policy = "AdministratorPolicy")]
+        public async Task<IActionResult> UpdateAdministrator(string id, [FromForm] UpdateUserViewModel model)
+        {
+            return await UpdateUser(id, model);
+        }
+
+        [HttpPut("update-deliveryworker/{id}")]
+        [Authorize(Policy = "DeliveryworkerPolicy")]
+        public async Task<IActionResult> UpdateDeliveryworker(string id, [FromForm] UpdateUserViewModel model)
+        {
+            return await UpdateUser(id, model);
+        }
+
+        [HttpPut("update-shipmentWorker/{id}")]
+        [Authorize(Policy = "ShipmentWorkerPolicy")]
+        public async Task<IActionResult> UpdateShipmentWorker(string id, [FromForm] UpdateUserViewModel model)
+        {
+            return await UpdateUser(id, model);
+        }
+
+        private async Task<IActionResult> UpdateUser(string id, [FromForm] UpdateUserViewModel model)
+        {
+            if (id != User.FindFirst(ClaimTypes.NameIdentifier).Value)
+            {
+                return Unauthorized();
+            }
+
+            var userDb = await _userManager.FindByIdAsync(id);
+
+            //Update Profile
+
+            if (userDb.ProfileImageUrl != null)
+            {
+                await _cloudStorage.DeleteImage(userDb.ProfileImageUrl);
+            }
+            var addedFileNameUrl = await _cloudStorage.UploadAsync(model.ProfileImage);
+            userDb.ProfileImageUrl = addedFileNameUrl;
+
+
+            var result = await _userManager.UpdateAsync(userDb);
+            var updatedEmployer = await _userManager.FindByIdAsync(id);
+
+            if (result.Succeeded)
+            {
+                return Ok(new
+                {
+                    result = result,
+                    userDb
+                });
+            }
+
+            return BadRequest(result);
         }
 
     }
