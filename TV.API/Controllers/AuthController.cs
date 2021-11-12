@@ -20,6 +20,7 @@ using Microsoft.Extensions.Options;
 using TV.SER.DTOs;
 using TV.SER.Interfaces;
 using Microsoft.AspNetCore.Cors;
+using AutoMapper;
 
 namespace TV.API.Controllers
 {
@@ -32,19 +33,22 @@ namespace TV.API.Controllers
         private readonly IConfiguration _config;
         private readonly IOptions<EmailOptionsDTO> _emailOptions;
         private readonly IEmail _email;
+        private readonly IMapper _mapper;
 
         public AuthController(
             UserManager<User> userManager,
             SignInManager<User> signInManager,
             IConfiguration config,
             IOptions<EmailOptionsDTO> emailOptions,
-            IEmail email)
+            IEmail email,
+            IMapper mapper)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _config = config;
             _emailOptions = emailOptions;
             _email = email;
+            _mapper = mapper;
         }
 
         [HttpPost("login")]
@@ -64,10 +68,13 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
 
+            var userToReturn = _mapper.Map<UserViewModel>(user);
+
             return Ok(new
             {
                 result = result,
-                token = JwtTokenGeneratorMachine(user).Result
+                token = JwtTokenGeneratorMachine(user).Result,
+                user = userToReturn
             });
         }
 

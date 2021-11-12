@@ -9,6 +9,9 @@
                 <input type="file" name="profileImage" id="profileImage" placeholder="Change Profile Image"
                     (change)="onFileChange($event)">
             </div>
+            <div *ngIf="authService.currentUser!.profileImageUrl">
+                <img src="{{ authService.currentUser!.profileImageUrl }}"alt="profileImage"/>
+            </div>
             <br />
             <button type="submit" class="btn btn-primary">Update Account</button>
         </form>

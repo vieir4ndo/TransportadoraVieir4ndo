@@ -16,6 +16,7 @@ using TV.SER.DTOs;
 using TV.SER.Interfaces;
 using System.Web;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace TV.API.Controllers
 {
@@ -27,20 +28,24 @@ namespace TV.API.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IOptions<EmailOptionsDTO> _emailOptions;
         private readonly IEmail _email;
-         private readonly ICloudStorage _cloudStorage;
+        private readonly ICloudStorage _cloudStorage;
+
+        private readonly IMapper _mapper;
 
         public UsersController(
             UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<EmailOptionsDTO> emailOptions,
             IEmail email,
-            ICloudStorage cloudStorage)
+            ICloudStorage cloudStorage,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailOptions = emailOptions;
             _email = email;
             _cloudStorage = cloudStorage;
+            _mapper = mapper;
         }
 
         [HttpPost("create-administrator")]
@@ -223,14 +228,15 @@ namespace TV.API.Controllers
 
 
             var result = await _userManager.UpdateAsync(userDb);
-            var updatedEmployer = await _userManager.FindByIdAsync(id);
+            var updatedUser = await _userManager.FindByIdAsync(id);
+            var userToReturn = _mapper.Map<UserViewModel>(updatedUser);
 
             if (result.Succeeded)
             {
                 return Ok(new
                 {
                     result = result,
-                    userDb
+                    user = userToReturn
                 });
             }
 

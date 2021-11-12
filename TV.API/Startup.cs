@@ -15,6 +15,7 @@ using TV.SER.Interfaces;
 using TV.SER.DTOs;
 using TV.SER.Factories;
 using System;
+using TV.API.Helpers.Mappers;
 
 namespace TV.API
 {
@@ -91,21 +92,21 @@ namespace TV.API
 
            });
             services.Configure<EmailOptionsDTO>(Configuration.GetSection("MailJet"));
-         services.AddSwaggerGen(s =>
-            {
-                s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+            services.AddSwaggerGen(s =>
                 {
-                    Version = "v1",
-                    Title = "Transportadora Vieir4ndo Swagger",
-                    Description = "APIs for the project Transportadora Vieir4ndo:)",
-                    Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                    s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                     {
-                        Name = "Matheus Vieira Santos",
-                        Url = new Uri("https://github.com/vieir4ndo")
-                    }
+                        Version = "v1",
+                        Title = "Transportadora Vieir4ndo Swagger",
+                        Description = "APIs for the project Transportadora Vieir4ndo:)",
+                        Contact = new Microsoft.OpenApi.Models.OpenApiContact
+                        {
+                            Name = "Matheus Vieira Santos",
+                            Url = new Uri("https://github.com/vieir4ndo")
+                        }
+                    });
                 });
-            });
-
+            services.AddAutoMapper(typeof(UserMappers));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

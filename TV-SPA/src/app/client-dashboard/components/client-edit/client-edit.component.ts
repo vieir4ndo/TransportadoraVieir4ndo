@@ -12,7 +12,7 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class ClientEditComponent implements OnInit {
 
   constructor(
-    private authService: AuthService,
+    public authService: AuthService,
     public progressBar: ProgressBarService,
     private alertService: AlertService,
     private userService: UserService

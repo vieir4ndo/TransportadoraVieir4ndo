@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit {
     private progress: NgProgress,
     public progressBar: ProgressBarService,
     public authService: AuthService,
-    private alertService: AlertService
+    private alertService: AlertService,
   ) { }
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class HeaderComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem('token');
+    this.authService.logout();
     this.alertService.success("Logged out");
   }
 
