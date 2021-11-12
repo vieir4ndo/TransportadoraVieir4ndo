@@ -12,6 +12,8 @@ export class AuthService {
   usersUrl = "http://localhost:5000/api/users/";
   confirmEmailUrl = "http://localhost:4200/confirm-email";
   changePasswordUrl = "http://localhost:4200/change-password";
+  avatarUrl = "https://ui-avatars.com/api/";
+
   helper = new JwtHelperService();
   decodedToken: any;
   currentUser: User | undefined;
@@ -26,6 +28,7 @@ export class AuthService {
           localStorage.setItem('user', JSON.stringify(response.user));
           this.decodedToken = this.helper.decodeToken(response.token);
           this.currentUser = response.user;
+          this.validateAvatar();
         }
       })
     )
@@ -65,5 +68,11 @@ export class AuthService {
     this.decodedToken = null;
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+  }
+
+  validateAvatar() : void{
+    if (this.currentUser!.profileImageUrl == null){
+      this.currentUser!.profileImageUrl = this.avatarUrl + this.currentUser!.username;
+    }
   }
 }

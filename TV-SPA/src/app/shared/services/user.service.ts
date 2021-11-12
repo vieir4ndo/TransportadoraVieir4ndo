@@ -29,6 +29,7 @@ export class UserService {
         map((response: any) => {
           if (response.result.succeeded) {
             this.authService.currentUser = response.user;
+            localStorage.setItem('user', JSON.stringify(response.user));
           }
         })
       )

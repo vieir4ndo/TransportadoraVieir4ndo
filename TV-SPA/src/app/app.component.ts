@@ -18,13 +18,14 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const token = localStorage.getItem('token') as string;
     const user: User = JSON.parse(localStorage.getItem('user') as string);
-
+    
     if (token){
       this.authService.decodedToken = this.helper.decodeToken(token); 
     }
     
     if (user){
       this.authService.currentUser = user;
+      this.authService.validateAvatar();
     }
   }
 }
