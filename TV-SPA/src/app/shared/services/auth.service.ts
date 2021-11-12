@@ -35,19 +35,11 @@ export class AuthService {
   }
 
   registerUser(model: any, type: string) {
-    let headers = new HttpHeaders({
-      'confirmEmailUrl': this.confirmEmailUrl
-    });
-    let options = { headers: headers };
-    return this.http.post(this.usersUrl + 'create-' + type, model, options);
+    return this.http.post(this.usersUrl + 'create-' + type, model);
   }
 
   resetPassword(model: any) {
-    let headers = new HttpHeaders({
-      'ChangePasswordUrl': this.changePasswordUrl
-    });
-    let options = { headers: headers };
-    return this.http.post(this.authUrl + 'reset-password', model, options);
+    return this.http.post(this.authUrl + 'reset-password', model);
   }
 
   confirmEmail(model: any) {

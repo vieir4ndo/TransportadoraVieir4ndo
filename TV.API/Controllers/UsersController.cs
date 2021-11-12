@@ -11,6 +11,7 @@ using TV.SER.Interfaces;
 using System.Web;
 using System.Security.Claims;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 
 namespace TV.API.Controllers
 {
@@ -23,6 +24,7 @@ namespace TV.API.Controllers
         private readonly IOptions<EmailOptionsDTO> _emailOptions;
         private readonly IEmail _email;
         private readonly ICloudStorage _cloudStorage;
+        private readonly IConfiguration _config;
 
         private readonly IMapper _mapper;
 
@@ -32,7 +34,8 @@ namespace TV.API.Controllers
             IOptions<EmailOptionsDTO> emailOptions,
             IEmail email,
             ICloudStorage cloudStorage,
-            IMapper mapper)
+            IMapper mapper,
+            IConfiguration config)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -40,6 +43,7 @@ namespace TV.API.Controllers
             _email = email;
             _cloudStorage = cloudStorage;
             _mapper = mapper;
+            _config = config;
         }
 
         [HttpPost("create-administrator")]
@@ -63,7 +67,7 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
 
-            await SendConfirmationEmail(user, model);
+            await SendConfirmationEmail(user, model.Email);
 
             var userFromDb  = await _userManager.FindByNameAsync(user.UserName);
             await _userManager.AddToRoleAsync(userFromDb, "Administrator");
@@ -92,7 +96,7 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
             
-            await SendConfirmationEmail(user, model);
+            await SendConfirmationEmail(user, model.Email);
 
             var userFromDb  = await _userManager.FindByNameAsync(user.UserName);
             await _userManager.AddToRoleAsync(userFromDb, "Client");
@@ -121,7 +125,7 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
             
-            await SendConfirmationEmail(user, model);
+            await SendConfirmationEmail(user, model.Email);
 
             var userFromDb  = await _userManager.FindByNameAsync(user.UserName);
             await _userManager.AddToRoleAsync(userFromDb, "DeliveryWorker");
@@ -150,7 +154,7 @@ namespace TV.API.Controllers
                 return BadRequest(result);
             }
             
-            await SendConfirmationEmail(user, model);
+            await SendConfirmationEmail(user, model.Email);
 
             var userFromDb  = await _userManager.FindByNameAsync(user.UserName);
             await _userManager.AddToRoleAsync(userFromDb, "ShipmentWorker");
@@ -158,10 +162,10 @@ namespace TV.API.Controllers
             return Ok(result);
         }
 
-        private async Task SendConfirmationEmail(User user, CreateUsersViewModel model)
+        private async Task SendConfirmationEmail(User user, string email)
         {
             var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            var confirmEmailUrl = Request.Headers["confirmEmailUrl"];//http://localhost:4200/email-confirm
+            var confirmEmailUrl = _config.GetSection("Urls:ConfirmEmail").Value;
 
             var uriBuilder = new UriBuilder(confirmEmailUrl);
             var query = HttpUtility.ParseQueryString(uriBuilder.Query);
@@ -170,8 +174,8 @@ namespace TV.API.Controllers
             uriBuilder.Query = query.ToString();
             var urlString = uriBuilder.ToString();
 
-            var emailBody = $"Please confirm your email by clicking on the link below </br>{urlString}";
-            await _email.Send(model.Email, emailBody, _emailOptions.Value);
+            var emailBody = $"Please confirm your email by clicking <a href='{urlString}'>here</a></br>";
+            await _email.Send(email, emailBody, _emailOptions.Value);
         }
 
         [HttpPut("update-client/{id}")]
@@ -211,15 +215,20 @@ namespace TV.API.Controllers
 
             var userDb = await _userManager.FindByIdAsync(id);
 
-            //Update Profile
-
-            if (userDb.ProfileImageUrl != null)
-            {
-                await _cloudStorage.DeleteImage(userDb.ProfileImageUrl);
+            if (!String.IsNullOrEmpty(model.Email)){
+                userDb.Email= model.Email;
+                await SendConfirmationEmail(userDb, model.Email);
+                userDb.EmailConfirmed = false;
             }
-            var addedFileNameUrl = await _cloudStorage.UploadAsync(model.ProfileImage);
-            userDb.ProfileImageUrl = addedFileNameUrl;
 
+            if (model.ProfileImage != null){
+                if (userDb.ProfileImageUrl != null)
+                {
+                    await _cloudStorage.DeleteImage(userDb.ProfileImageUrl);
+                }
+                var addedFileNameUrl = await _cloudStorage.UploadAsync(model.ProfileImage);
+                userDb.ProfileImageUrl = addedFileNameUrl;
+            }
 
             var result = await _userManager.UpdateAsync(userDb);
             var updatedUser = await _userManager.FindByIdAsync(id);

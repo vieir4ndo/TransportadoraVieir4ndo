@@ -86,7 +86,8 @@ namespace TV.API.Controllers
             if (user != null || user.EmailConfirmed)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var changePassword = Request.Headers["ChangePasswordUrl"];//http://localhost:4200/change-password
+                
+                var changePassword = _config.GetSection("Urls:ChangePassword").Value;
 
                 var uriBuilder = new UriBuilder(changePassword);
                 var query = HttpUtility.ParseQueryString(uriBuilder.Query);
