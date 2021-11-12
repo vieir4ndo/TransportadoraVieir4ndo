@@ -21,12 +21,12 @@ export class RegisterComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    this.alertService.info("Init Register");
+    this.alertService.info("Checking Information");
     this.progressBar.startLoading();
     const registerObserver = {
       next: () => {
         console.log('User client created');
-        this.alertService.success("Success Register");
+        this.alertService.success("User Registered");
         this.progressBar.completeLoading();
       },
       error: (err: any) => {

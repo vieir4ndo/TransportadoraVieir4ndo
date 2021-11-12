@@ -1,8 +1,6 @@
 <div class="row">
     <div class="col-md-6 offset-md-3 mt-4">
         <h3>Confirm Email</h3>
-        <div class="alert alert-success" role="alert" *ngIf="emailConfirmed">Email confirmed</div>
-        <div class="alert alert-danger" role="alert" *ngIf="hasError">Unable to confirm email</div>
         <form #f="ngForm" (ngSubmit)="onSubmit()">
             <button type="submit" class="btn btn-primary">Confirm email</button>
         </form>

@@ -22,18 +22,17 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    this.alertService.info('Init Login');
+    this.alertService.info('Checking Information');
     this.progressBar.startLoading();
     this.progressBar.startLoading();
     const loginObserver = {
       next: () => {
-        console.log('User logged in');
-        this.alertService.success('Logged in');
+        this.alertService.success('User Logged In');
         this.progressBar.completeLoading();
       },
       error: (err: any) => {
         console.log(err);
-        this.alertService.danger('Unable to log in');
+        this.alertService.danger('Unable to Login');
         this.progressBar.completeLoading();
       }
     };

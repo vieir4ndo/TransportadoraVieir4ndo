@@ -28,10 +28,9 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   onSubmit() {
-    this.alertService.info('Init Change Password');
+    this.alertService.info('Checking Information');
     this.progressBar.startLoading();
     this.authService.changePassword(this.model).subscribe(() => {
-      console.log("success");
       this.alertService.success('Password Changed');
       this.changedPassword = true;
       this.progressBar.completeLoading();

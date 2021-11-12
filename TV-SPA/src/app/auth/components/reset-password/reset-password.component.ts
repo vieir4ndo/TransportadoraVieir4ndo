@@ -21,17 +21,16 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   onSubmit(f: NgForm) {
-    this.alertService.info("Init Reset Password");
+    this.alertService.info("Checking Information");
     this.progressBar.startLoading();
     const resetPasswordObserver = {
       next: () => {
-        console.log('Email sent');
-        this.alertService.success("Email sent");
+        this.alertService.success("New Password Solicitated");
         this.progressBar.completeLoading();
       },
       error: (err: any) => {
         console.log(err);
-        this.alertService.danger("Email not sent");
+        this.alertService.danger("Unable to Solicitate New Password");
         this.progressBar.completeLoading();
       }
     };

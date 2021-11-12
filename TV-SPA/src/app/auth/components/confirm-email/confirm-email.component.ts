@@ -18,8 +18,6 @@ export class ConfirmEmailComponent implements OnInit {
     private alertService: AlertService
   ) { }
 
-  hasError: boolean = false;
-  emailConfirmed: boolean = false;
   model: any = {};
 
   ngOnInit(): void {
@@ -28,19 +26,15 @@ export class ConfirmEmailComponent implements OnInit {
   }
 
   onSubmit(): void {
-    this.alertService.info("Init Confirm Email");
+    this.alertService.info("Checking Information");
     this.progressBar.startLoading();
     this.authService.confirmEmail(this.model).subscribe(() => {
-      console.log("success");
       this.alertService.success("Email Confirmed");
-      this.emailConfirmed = true;
       this.progressBar.completeLoading();
     }, error => {
       console.log(error);
       this.alertService.danger("Unable to Confirm Email");
-      this.hasError = true;
       this.progressBar.completeLoading();
-
     });
   }
 

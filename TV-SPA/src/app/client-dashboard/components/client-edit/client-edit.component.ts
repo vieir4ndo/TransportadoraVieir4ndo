@@ -28,17 +28,17 @@ export class ClientEditComponent implements OnInit {
   }
 
   onSubmit() {
-    this.alertService.info('Checking User Info');
+    this.alertService.info('Checking Information');
     this.progressBar.startLoading();
     this.progressBar.startLoading();
     const updateClientObserver = {
       next: () => {
-        this.alertService.success('Account Updated');
+        this.alertService.success('User Updated');
         this.progressBar.completeLoading();
       },
       error: (err: any) => {
         console.log(err);
-        this.alertService.danger('Unable to Updated Account');
+        this.alertService.danger('Unable to Updated User');
         this.progressBar.completeLoading();
       }
     };
