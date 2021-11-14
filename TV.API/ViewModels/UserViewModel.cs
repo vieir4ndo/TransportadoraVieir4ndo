@@ -4,5 +4,9 @@ namespace TV.API.ViewModels{
         public string Username { get; set; }
         public string Email { get; set; }
         public string ProfileImageUrl { get; set; }
+
+        public string Name {get; set;}
+        public string Adress {get;set;}
+        public string FederalRegistration { get; set;}
     }
 }

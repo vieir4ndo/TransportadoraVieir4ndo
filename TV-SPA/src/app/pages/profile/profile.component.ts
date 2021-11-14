@@ -1,15 +1,16 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
 import { AlertService } from 'ngx-alerts';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ProgressBarService } from 'src/app/shared/services/progress-bar.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
-  selector: 'app-client-edit',
-  templateUrl: './client-edit.component.html',
-  styleUrls: ['./client-edit.component.scss']
+  selector: 'app-profile',
+  templateUrl: './profile.component.html',
+  styleUrls: ['./profile.component.scss']
 })
-export class ClientEditComponent implements OnInit {
+export class ProfileComponent implements OnInit {
 
   constructor(
     public authService: AuthService,
@@ -27,7 +28,7 @@ export class ClientEditComponent implements OnInit {
     this.model = e.target.files[0];
   }
 
-  onSubmit() {
+  onSubmit(f: NgForm) {
     this.alertService.info('Checking Information');
     this.progressBar.startLoading();
     this.progressBar.startLoading();

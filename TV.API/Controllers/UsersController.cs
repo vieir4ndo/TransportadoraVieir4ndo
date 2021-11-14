@@ -221,6 +221,15 @@ namespace TV.API.Controllers
                 userDb.EmailConfirmed = false;
             }
 
+            if (!String.IsNullOrEmpty(model.FederalRegistration))
+                userDb.FederalRegistration= model.FederalRegistration;
+
+            if (!String.IsNullOrEmpty(model.Name))
+                userDb.Name= model.Name;
+
+            if (!String.IsNullOrEmpty(model.Adress))
+                userDb.Adress= model.Adress;
+
             if (model.ProfileImage != null){
                 if (userDb.ProfileImageUrl != null)
                 {

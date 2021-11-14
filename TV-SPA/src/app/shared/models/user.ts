@@ -3,4 +3,7 @@ export interface User {
     username : string;
     email : string;
     profileImageUrl?: string;
+    name : string;
+    adress: string;
+    federalRegistration: string;
 }

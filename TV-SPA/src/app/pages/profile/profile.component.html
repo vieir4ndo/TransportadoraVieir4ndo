@@ -1,0 +1,46 @@
+<app-dashboard></app-dashboard>
+<form #f="ngForm" (ngSubmit)="onSubmit(f)">
+<div class="row">
+    <h3>Profile</h3>
+    <div class="col">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" name="name" [(ngModel)]="authService.currentUser!.name"
+                #name="ngModel">
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="federalRegistration">Federal Registration</label>
+            <input type="text" class="form-control" name="federalRegistration" [(ngModel)]="authService.currentUser!.federalRegistration"
+                        #federalRegistration="ngModel" >
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="adress">Adress</label>
+            <input type="text" class="form-control" name="adress" [(ngModel)]="authService.currentUser!.adress"
+                        #adress="ngModel" >
+        </div>
+        <br />
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input type="text" class="form-control" name="username" [(ngModel)]="authService.currentUser!.username" readonly
+                        #username="ngModel" >
+        </div>
+        <br />
+    </div>
+    <div class="col">
+        <div class="form-group">
+            <div>
+                <label for="profileImage">Change Profile Image</label>
+            </div>
+            <input type="file" name="profileImage" id="profileImage" placeholder="Change Profile Image"
+                (change)="onFileChange($event)">
+        </div>
+        <div *ngIf="authService.currentUser!.profileImageUrl">
+            <img src="{{ authService.currentUser!.profileImageUrl }}"alt="profileImage"/>
+        </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Update Account</button>
+    </div>
+</div>
+</form>

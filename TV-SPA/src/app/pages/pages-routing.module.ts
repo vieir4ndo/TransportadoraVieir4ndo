@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { HomeComponent } from '../pages/home/home.component';
-import { ClientEditComponent } from './components/client-edit/client-edit.component';
+import { HomeComponent } from './home/home.component';
+import { ProfileComponent } from './profile/profile.component';
 
 const routes: Routes = [
-  { path: 'client-edit', component: ClientEditComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'home', component: HomeComponent }
 ];
 
@@ -12,4 +12,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class ClientDashboardRoutingModule { }
+export class PagesRoutingModule { }

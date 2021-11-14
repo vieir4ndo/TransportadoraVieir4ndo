@@ -7,12 +7,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { SharedModule } from './shared/shared.module';
 import { AuthModule } from './auth/auth.module';
 import { HomeComponent } from './pages/home/home.component';
-import { ClientDashboardModule } from './client-dashboard/client-dashboard.module';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { PagesModule } from './pages/pages.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    HomeComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -20,7 +20,7 @@ import { ClientDashboardModule } from './client-dashboard/client-dashboard.modul
     HttpClientModule,
     SharedModule,
     AuthModule,
-    ClientDashboardModule
+    PagesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

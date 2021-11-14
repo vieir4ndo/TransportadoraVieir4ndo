@@ -26,7 +26,7 @@ import { AuthComponent } from './layouts/auth/auth.component';
     BrowserAnimationsModule,
     BrowserModule,
     BsDropdownModule.forRoot(),
-    AlertModule.forRoot({ maxMessages: 5, timeout: 5000, positionX: 'right', positionY: 'top' })
+    AlertModule.forRoot({ maxMessages: 5, timeout: 5000, positionX: 'right', positionY: 'top'})
   ],
   exports: [
     DashboardComponent,

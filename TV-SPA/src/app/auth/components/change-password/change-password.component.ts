@@ -19,8 +19,6 @@ export class ChangePasswordComponent implements OnInit {
   ) { }
 
   model: any = {};
-  changedPassword: boolean = false;
-  hasError: boolean = false;
 
   ngOnInit(): void {
     this.model.token = this.route.snapshot.queryParamMap.get('token');
@@ -32,15 +30,12 @@ export class ChangePasswordComponent implements OnInit {
     this.progressBar.startLoading();
     this.authService.changePassword(this.model).subscribe(() => {
       this.alertService.success('Password Changed');
-      this.changedPassword = true;
       this.progressBar.completeLoading();
 
     }, error => {
       console.log(error);
       this.alertService.danger('Unable to Change Password');
-      this.hasError = true;
       this.progressBar.completeLoading();
-
     });
   }
 
