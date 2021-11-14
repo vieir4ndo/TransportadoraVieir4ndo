@@ -1,11 +1,12 @@
-.home-image-wrapper{
-    overflow: hidden;
-}
-.home-image-wrapper img{
+ img{
     display: block;
     margin: auto;
     width:95%;
 }
-.home-main-row p {
+ p {
     text-align: justify;
+}
+.row.home-main.column {
+    padding: 3vw;
+    width: 40vw;
 }

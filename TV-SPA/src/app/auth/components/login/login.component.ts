@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertService } from 'ngx-alerts';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { ProgressBarService } from 'src/app/shared/services/progress-bar.service';
@@ -14,7 +15,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     public progressBar: ProgressBarService,
-    private alertService: AlertService
+    private alertService: AlertService,
+    private router : Router
   ) { }
 
   ngOnInit(): void {
@@ -29,6 +31,7 @@ export class LoginComponent implements OnInit {
       next: () => {
         this.alertService.success('User Logged In');
         this.progressBar.completeLoading();
+        this.router.navigate(['/home']);
       },
       error: (err: any) => {
         console.log(err);
