@@ -187,7 +187,7 @@ namespace TV.API.Controllers
 
         [HttpPut("update-administrator/{id}")]
         [Authorize(Policy = "AdministratorPolicy")]
-        public async Task<IActionResult> UpdateAdministrator(string id, [FromForm] UpdateUserViewModel model)
+        public async Task<IActionResult> UpdateAdministrator(string id, [FromForm]  UpdateUserViewModel model)
         {
             return await UpdateUser(id, model);
         }

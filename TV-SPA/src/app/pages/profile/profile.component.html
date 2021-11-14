@@ -10,6 +10,12 @@
         </div>
         <br />
         <div class="form-group">
+            <label for="email">E-mail</label>
+            <input type="email" class="form-control" name="email" [(ngModel)]="authService.currentUser!.email"
+                        #federalRegistration="ngModel" >
+        </div>
+        <br />
+        <div class="form-group">
             <label for="federalRegistration">Federal Registration</label>
             <input type="text" class="form-control" name="federalRegistration" [(ngModel)]="authService.currentUser!.federalRegistration"
                         #federalRegistration="ngModel" >
@@ -28,19 +34,23 @@
         </div>
         <br />
     </div>
-    <div class="col">
-        <div class="form-group">
+    <div class="col profile">
+        <div class="profile-image">
+            <img id="profileImageOutput" name="profileOutput" class="img-thumbnail rounded-circle" src="{{ authService.currentUser!.profileImageUrl }}" alt="profileImage"/>
+        </div>
+        <div class="form-group" style="display: block;float: bottom;">
             <div>
-                <label for="profileImage">Change Profile Image</label>
+                <label for="profileimage">Change Profile Image</label>
             </div>
-            <input type="file" name="profileImage" id="profileImage" placeholder="Change Profile Image"
-                (change)="onFileChange($event)">
+            <input type="file" class="form-control" name="profileimage" (change)="onFileChange($event)">
         </div>
-        <div *ngIf="authService.currentUser!.profileImageUrl">
-            <img src="{{ authService.currentUser!.profileImageUrl }}"alt="profileImage"/>
-        </div>
-        <br />
-        <button type="submit" class="btn btn-primary">Update Account</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+    </div>
+    <div class="col">
+        <button type="submit" class="btn btn-primary" style="float: right;">Update Account</button>
     </div>
 </div>
 </form>

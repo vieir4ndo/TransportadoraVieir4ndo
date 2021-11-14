@@ -35,7 +35,7 @@ namespace TV.SER
         public async Task<string> UploadAsync(IFormFile file)
         {
             var blobContainer = await _storageConnectionFactory.GetContainer();
-            var thumbnailWidth = 100;
+            var thumbnailWidth = 200;
             var extension = Path.GetExtension(file.FileName);
             var encoder = GetEncoder(extension);
             CloudBlockBlob blob = blobContainer.GetBlockBlobReference(GetRandomBlobName(file.FileName));

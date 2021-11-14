@@ -13,14 +13,20 @@ export class UserService {
   constructor(private http: HttpClient, private authService: AuthService) { }
 
   updateClient(model: any) {
-    const httpOption = {
+    let httpOption = {
       headers: new HttpHeaders({
         "Authorization": "Bearer " + localStorage.getItem('token') as string
       })
     };
-    
+
     let formData = new FormData();
-    formData.append("profileimage", model, model.name)
+    formData.append("profileimage", model.profileimage, model.profileimage.name);
+    formData.append("name", model.name);
+    formData.append("adress", model.adress);
+    formData.append("federalRegistration", model.federalRegistration);
+    formData.append("email", model.email);
+    
+    console.log(formData);
 
     return this.http.put(
       this.usersUrl + 'update-client/' + this.authService.decodedToken.nameid,

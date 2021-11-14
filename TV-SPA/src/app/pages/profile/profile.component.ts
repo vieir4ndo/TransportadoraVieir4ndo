@@ -25,13 +25,20 @@ export class ProfileComponent implements OnInit {
   }
 
   onFileChange(e: any) {
-    this.model = e.target.files[0];
+    this.model.profileimage = e.target.files[0];
   }
 
   onSubmit(f: NgForm) {
     this.alertService.info('Checking Information');
     this.progressBar.startLoading();
     this.progressBar.startLoading();
+
+    debugger;
+    this.model.name = f.value.name;
+    this.model.federalRegistration =  f.value.federalRegistration;
+    this.model.email = f.value.email;
+    this.model.adress = f.value.adress;
+
     const updateClientObserver = {
       next: () => {
         this.alertService.success('User Updated');
@@ -43,7 +50,7 @@ export class ProfileComponent implements OnInit {
         this.progressBar.completeLoading();
       }
     };
-
     this.userService.updateClient(this.model).subscribe(updateClientObserver);
   }
 }
+
