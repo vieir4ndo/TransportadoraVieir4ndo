@@ -33,7 +33,6 @@ export class ProfileComponent implements OnInit {
     this.progressBar.startLoading();
     this.progressBar.startLoading();
 
-    debugger;
     this.model.name = f.value.name;
     this.model.federalRegistration =  f.value.federalRegistration;
     this.model.email = f.value.email;

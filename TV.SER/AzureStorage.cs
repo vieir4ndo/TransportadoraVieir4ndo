@@ -48,6 +48,7 @@ namespace TV.SER
                     var height = Convert.ToInt32(Math.Round((decimal)(image.Height / divisor)));
 
                     image.Mutate(x => x.Resize(thumbnailWidth, height));
+                    image.Mutate(x  => x.Crop(thumbnailWidth, thumbnailWidth));
                     image.Save(output, encoder);
                     output.Position = 0;
                     await blob.UploadFromStreamAsync(output);
@@ -55,7 +56,6 @@ namespace TV.SER
             }
 
             return blob.Uri.AbsoluteUri;
-
         }
 
         /// <summary> 

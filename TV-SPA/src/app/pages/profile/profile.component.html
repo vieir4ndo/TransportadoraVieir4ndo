@@ -38,11 +38,9 @@
         <div class="profile-image">
             <img id="profileImageOutput" name="profileOutput" class="img-thumbnail rounded-circle" src="{{ authService.currentUser!.profileImageUrl }}" alt="profileImage"/>
         </div>
-        <div class="form-group" style="display: block;float: bottom;">
-            <div>
-                <label for="profileimage">Change Profile Image</label>
-            </div>
-            <input type="file" class="form-control" name="profileimage" (change)="onFileChange($event)">
+        
+        <div class="form-group" >
+            <input class="form-control" name="profileimage" (change)="onFileChange($event)" type="file">
         </div>
     </div>
 </div>

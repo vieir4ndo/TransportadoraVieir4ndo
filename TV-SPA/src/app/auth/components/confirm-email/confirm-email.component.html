@@ -4,7 +4,9 @@
         <h3>Confirm Email</h3>
         <form #f="ngForm" (ngSubmit)="onSubmit()">
             <label for="submit">Click on the button below to confirm your e-mail</label>
-            <button type="submit" class="btn btn-primary">Confirm email</button>
+            <br /><br />
+            <a [routerLink]="['']" routerLinkActive="router-link-active" class="btn btn-outline-primary" style="float: left;">Login Your Account</a>
+            <button type="submit" class="btn btn-primary"  style="float: right;">Confirm email</button>
         </form>
     </div>
 </div>

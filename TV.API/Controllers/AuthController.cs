@@ -96,7 +96,7 @@ namespace TV.API.Controllers
                 uriBuilder.Query = query.ToString();
                 var urlString = uriBuilder.ToString();
 
-                var emailBody = $"Click on the link to change password </br>{urlString}";
+                var emailBody = $"To change your password click <a href='{urlString}'>here</a><br />";
                 await _email.Send(model.Email, emailBody, _emailOptions.Value);
 
                 return Ok();

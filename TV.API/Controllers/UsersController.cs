@@ -215,22 +215,22 @@ namespace TV.API.Controllers
 
             var userDb = await _userManager.FindByIdAsync(id);
 
-            if (!String.IsNullOrEmpty(model.Email)){
+            if (!String.IsNullOrEmpty(model.Email) && model.Email != userDb.Email){
                 userDb.Email= model.Email;
                 await SendConfirmationEmail(userDb, model.Email);
                 userDb.EmailConfirmed = false;
             }
 
-            if (!String.IsNullOrEmpty(model.FederalRegistration))
+            if (!String.IsNullOrEmpty(model.FederalRegistration)  && model.FederalRegistration != userDb.FederalRegistration)
                 userDb.FederalRegistration= model.FederalRegistration;
 
-            if (!String.IsNullOrEmpty(model.Name))
+            if (!String.IsNullOrEmpty(model.Name)  && model.Name != userDb.Name)
                 userDb.Name= model.Name;
 
-            if (!String.IsNullOrEmpty(model.Adress))
+            if (!String.IsNullOrEmpty(model.Adress) && model.Adress != userDb.Adress)
                 userDb.Adress= model.Adress;
 
-            if (model.ProfileImage != null){
+            if (model.ProfileImage != null ){
                 if (userDb.ProfileImageUrl != null)
                 {
                     await _cloudStorage.DeleteImage(userDb.ProfileImageUrl);
