@@ -96,9 +96,7 @@ namespace TV.API
                 {
                     s.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
                     {
-                        Version = "v1",
-                        Title = "Transportadora Vieir4ndo Swagger",
-                        Description = "APIs for the project Transportadora Vieir4ndo:)",
+                        Title = "Transportadora Vieir4ndo",
                         Contact = new Microsoft.OpenApi.Models.OpenApiContact
                         {
                             Name = "Matheus Vieira Santos",
